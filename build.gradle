@@ -1,0 +1,4 @@
+// Root build file for the Mohamed Farid App Studio WebView template.
+plugins {
+    id 'com.android.application' version '8.5.2' apply false
+}

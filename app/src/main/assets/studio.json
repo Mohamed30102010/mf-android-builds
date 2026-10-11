@@ -1,0 +1,10 @@
+{
+  "appName": "MF Studio App",
+  "packageId": "app.mfstudio.webview",
+  "versionName": "1.0.0",
+  "sourceUrl": "https://example.com",
+  "primaryColor": "#7C5CFF",
+  "accentColor": "#F0B429",
+  "iconUrl": "",
+  "splashUrl": ""
+}

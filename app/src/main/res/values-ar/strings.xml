@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_title">تعذّر التحميل</string>
+    <string name="error_body">لم يتم تحميل الصفحة %1$s. تحقّق من اتصالك ثم أعد المحاولة.</string>
+    <string name="error_retry">إعادة المحاولة</string>
+    <string name="error_browser">افتح في المتصفح</string>
+</resources>

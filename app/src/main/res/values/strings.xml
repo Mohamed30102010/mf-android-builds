@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MF Studio App</string>
+    <string name="error_title">Could not load</string>
+    <string name="error_body">The page %1$s did not load. Check your connection and try again.</string>
+    <string name="error_retry">Try again</string>
+    <string name="error_browser">Open in browser</string>
+</resources>

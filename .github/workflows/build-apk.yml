@@ -1,0 +1,71 @@
+name: Build Android APK
+
+run-name: Build ${{ inputs.tag }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_name:      { required: true,  type: string }
+      package_id:    { required: true,  type: string }
+      version_name:  { required: false, type: string, default: "1.0.0" }
+      source_url:    { required: false, type: string }
+      source_zip:    { required: false, type: string }
+      icon_url:      { required: false, type: string }
+      splash_url:    { required: false, type: string }
+      primary_color: { required: false, type: string, default: "#7C5CFF" }
+      accent_color:  { required: false, type: string, default: "#F0B429" }
+      tag:           { required: true,  type: string }
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Apply studio configuration
+        env:
+          APP_NAME: ${{ inputs.app_name }}
+          PACKAGE_ID: ${{ inputs.package_id }}
+          VERSION_NAME: ${{ inputs.version_name }}
+          SOURCE_URL: ${{ inputs.source_url }}
+          SOURCE_ZIP: ${{ inputs.source_zip }}
+          ICON_URL: ${{ inputs.icon_url }}
+          SPLASH_URL: ${{ inputs.splash_url }}
+          PRIMARY: ${{ inputs.primary_color }}
+          ACCENT: ${{ inputs.accent_color }}
+        run: python3 scripts/apply_config.py
+
+      - name: Build APK
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Verify the built file
+        run: |
+          set -e
+          APK=$(find app/build/outputs/apk -name "*.apk" | head -n 1)
+          test -n "$APK"
+          test -s "$APK"
+          OUT="${APK%/*}/MFStudio-${{ inputs.tag }}.apk"
+          mv "$APK" "$OUT"
+          ls -lh "$OUT"
+          echo "APK_PATH=$OUT" >> "$GITHUB_ENV"
+
+      - name: Publish the APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          name: ${{ inputs.app_name }} ${{ inputs.version_name }}
+          body: Built by Mohamed Farid App Studio.
+          files: ${{ env.APK_PATH }}
+          fail_on_unmatched_files: true
